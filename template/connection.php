@@ -7,10 +7,10 @@
 
 class createConnection //create a class for make connection
 {
-    var $host="localhost";
+    var $host="127.0.0.1";
     var $username="root";    // specify the sever details for mysql
     Var $password="";
-    var $database="database";
+    var $database="filmreviewer";
     var $myconn;
 
     function connectToDatabase() // create a function for connect database
@@ -20,7 +20,7 @@ class createConnection //create a class for make connection
 
         if(!$conn)// testing the connection
         {
-            die ("Cannot connect to the database");
+            die (mysql_error());
         }
 
         else
@@ -38,7 +38,7 @@ class createConnection //create a class for make connection
 
         if(mysql_error()) // if error occured display the error message
         {
-            echo "Cannot find the database ".$this->database;
+            die (mysql_error());
         }
     }
 
