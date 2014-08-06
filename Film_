@@ -1,0 +1,35 @@
+> type phimreview.com => directly go to
+phimreview.com/new
+- show 10 current films 
+
+server : get request
+----------> show page from database
+use app.send();
+----------------> index.html
+Detail :
+	phimreview.com/new/1 => film 1
+	phimreview.com/new/2 => film 2
+	...
+	server get request id film => show detail of film
+----------------> detail.html	
+
+phimreview.com/commingup/1 
+
+phimreview.com/old/1 
+
+================================
+
+
+
+
+process :
+
+
+
+
+
+
+
+
+
+
