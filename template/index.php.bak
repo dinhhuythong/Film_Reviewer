@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -45,17 +44,17 @@
 				{
 				?>	
 				<!-- Film 1 -->
-				<h2><?php echo $row['name'] ?></h2>
+				<h2><a href="#" style="text-decoration: none"><?php echo $row['name'] ?> </a></h2>
 				<!-- image -->
 				<img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="<?php echo $row['images'] ?>" alt="image" />
 				<!-- information -->
 				<p>
 					<b>Information:</b>
-					<?php echo $row['information'] ?>
+					<?php echo $row['summary'] ?>
 				</p>
 				<!-- like, comment, rate -->
 				<p>
-				No images were used for a design. This is pure xhtml/css template.
+				<a href="#" style="text-decoration: none">Rate:<?php echo $row['rate'] ?> </a>&nbsp;&nbsp;<a href="#" style="text-decoration: none">Comment:<?php echo $row['comment'] ?> </a>&nbsp;&nbsp;<a href="#" style="text-decoration: none"> Like:<?php echo $row['likes'] ?> </a>  
 				</p>
 				<div class="clear"> </div>
 		<?php 

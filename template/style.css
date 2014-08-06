@@ -41,7 +41,7 @@ background: #880000;
 height: 50px;
 line-height: 50px;
 color: #fff;
-font-size: 19px;
+font-size: 17px;
 }
 
 #menu ul {
@@ -61,6 +61,7 @@ color: #fff;
 color: #ffffbb;
 text-decoration: none;
 }
+
 
 #content { background: #fff; padding: 10px 20px;text-decoration: none;}
 #content h2 { padding-top: 10px; font-weight: normal; font-size: 30px; color: #383838; text-decoration: none;}

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -21,11 +20,11 @@
 
 	<div id="menu">
 		<ul>
-			<li><a href="#">Home</a></li>
-			<li><a href="#">About Us</a></li>
-			<li><a href="#">What We Do</a></li>
-			<li><a href="#">The Team</a></li>
-			<li><a href="#">Contact Us</a></li>
+			<li><a href="pdc.php">PHIM ĐANG CHIẾU</a></li>
+    		<li><a href="psc.php">PHIM SẮP CHIẾU</a></li>
+    		<li><a href="pdac.php">PHIM ĐÃ CHIẾU</a></li>
+    		<li><a href="#">Ý KIẾN</a></li>
+    		<li><a href="#">LIÊN HỆ</a></li>
 		</ul>
 	</div>
 	 <div id="content">
@@ -37,7 +36,7 @@
 			$query=mysql_query($sql);
 			if(mysql_num_rows($query) == 0)
 			{
-				echo "Chua co du lieu";
+				echo "Nôi dung đang được xây dựng, quay lại sau !!!!!";
 			}
 			else
 			{
@@ -45,7 +44,7 @@
 				{
 				?>	
 				<!-- Film 1 -->
-				<h2><a href="#" style="text-decoration: none"><?php echo $row['name'] ?> </a></h2>
+				<h2><a href="ctf.php?t=<?php echo $row['trthai']?>&r=<?php echo $row['id']?>" style="text-decoration: none"><?php echo $row['name'] ?> </a></h2>
 				<!-- image -->
 				<img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="<?php echo $row['images'] ?>" alt="image" />
 				<!-- information -->
@@ -59,7 +58,7 @@
 					$queryImage = mysql_query($sqlImage);
 					if(mysql_num_rows($queryImage) == 0)
 					{
-						echo "Chua co du lieu";
+						echo "Nôi dung đang được xây dựng, quay lại sau !!!!!";
 					}
 					else
 					{
@@ -69,28 +68,27 @@
 							{
 						?>
 						<p>
-							<a href="#" style="text-decoration: none"><img src="<?php echo $rowImage['url']?>">:<?php echo $row['comment'] ?></img></a>
+							<a href="ctf.php?t=<?php echo $row['trthai']?>&r=<?php echo $row['id']?>" style="text-decoration: none"><img src="<?php echo $rowImage['url']?>">:<?php echo $row['comment'] ?></img></a>
 							&nbsp;&nbsp;  
 						<?php 
 							}
 							if($rowImage['id']==2)//like
 							{
 						?>
-								<a href="#" style="text-decoration: none"><img src="<?php echo $rowImage['url']?>">:<?php echo $row['likes'] ?> </img></a>
+								<a href="ctf.php?t=<?php echo $row['trthai']?>&r=<?php echo $row['id']?>" style="text-decoration: none"><img src="<?php echo $rowImage['url']?>">:<?php echo $row['likes'] ?> </img></a>
 								&nbsp;&nbsp;
 						<?php
 							}
 							if($rowImage['id']==3)//rate
 							{
 						?>
-								<a href="#" style="text-decoration: none"><img src="<?php echo $rowImage['url']?>">:<?php echo $row['rate'] ?></img></a>
+								<a href="ctf.php?t=<?php echo $row['trthai']?>&r=<?php echo $row['id']?>" style="text-decoration: none"><img src="<?php echo $rowImage['url']?>">:<?php echo $row['rate'] ?></img></a>
 						</p>
 						<?php
 							}
 						}
 					}
 				?>
-				
 				<div class="clear"> </div>
 		<?php 
 			}
@@ -99,7 +97,7 @@
 		?>
 	</div>
 	<div class="footer">
-		<h2>© Copyright 2006-2014 Test</h2>
+		<h2>� Copyright 2006-2014 Test</h2>
 	</div>
 </div>
 </body>

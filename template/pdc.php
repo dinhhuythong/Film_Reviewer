@@ -20,7 +20,7 @@
 
 	<div id="menu">
 		<ul>
-    		<li><a href="pdc.php">PHIM ĐANG CHIẾU</a></li>
+			<li><a href="pdc.php">PHIM ĐANG CHIẾU</a></li>
     		<li><a href="psc.php">PHIM SẮP CHIẾU</a></li>
     		<li><a href="pdac.php">PHIM ĐÃ CHIẾU</a></li>
     		<li><a href="#">Ý KIẾN</a></li>
@@ -44,7 +44,7 @@
 				{
 				?>	
 				<!-- Film 1 -->
-				<h2><a href="ctf.php/<?php $row['trthai']."/".$row['id'] ?>" style="text-decoration: none"><?php echo $row['name'] ?> </a></h2>
+				<h2><a href="#" style="text-decoration: none"><?php echo $row['name'] ?> </a></h2>
 				<!-- image -->
 				<img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="<?php echo $row['images'] ?>" alt="image" />
 				<!-- information -->
@@ -98,7 +98,7 @@
 		?>
 	</div>
 	<div class="footer">
-		<h2>© Copyright 2006-2014 Test</h2>
+		<h2>� Copyright 2006-2014 Test</h2>
 	</div>
 </div>
 </body>
