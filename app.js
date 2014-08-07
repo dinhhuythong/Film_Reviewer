@@ -23,10 +23,18 @@ var FILM_DIRECTOR = 'director';
 var FILM_ACTOR = 'actors';
 var FILM_IMAGE = 'image';
 
+var PAGE_NEW = '/new';
+var PAGE_CURR = '/curr';
+var PAGE_OLD = '/old';
+
 var strHeader = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
 strHeader += '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8" /><meta name="description" content="Simple Template #3 from simpletemplates.org" /><meta name="keywords" content="simple #3, template, simpletemplates.org" />';
-strHeader += '<link rel="stylesheet" type="text/css" href="' + HTTP_STRING + host + SYM_COLON + port + PUBLIC_DIR + SYM_SEPARATE + FILE_STYLE_CSS + '" /><title>Simple Template #3 - simpletemplates.org</title></head><body><div id="wrap">';
-strHeader += '<div id="menu"><ul><li><a href="/">Home</a></li><li><a href="/new">New</a></li><li><a href="/curr">Đang Chiếu</a></li><li><a href="/old">Đã Chiếu</a></li><li><a href="/chat">Rủ Rê Xem Phim</a></li><li><a href="/contact">Contact Us</a></li></ul></div>';
+//script Header
+strHeader += '<link rel="stylesheet" type="text/css" href="' + HTTP_STRING + host + SYM_COLON + port + PUBLIC_DIR + SYM_SEPARATE + FILE_STYLE_CSS + '" /><title>Simple Template #3 - simpletemplates.org</title></head>';
+//script Facebook
+strHeader += '<div id="fb-root"></div><script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>';
+//script body
+strHeader += '<body><div id="wrap"><div id="menu"><ul><li><a href="/">Home</a></li><li><a href="/new">New</a></li><li><a href="/curr">Đang Chiếu</a></li><li><a href="/old">Đã Chiếu</a></li><li><a href="/chat">Rủ Rê Xem Phim</a></li><li><a href="/contact">Contact Us</a></li></ul></div>';
 
 var strContent;
 //'<div id="content"><h2>NAME</h2><img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="123" alt="image" /><p><b>Information:</b>Infomation</p><p>No images were used for a design. This is pure xhtml/css template.</p><div class="clear"> </div></div>';
@@ -64,7 +72,7 @@ app.get("/",function(request,response){
 					//console.log(" total item : " + items.length);
 					
 					for(var i=0;i<items.length;i++){
-						resultStr += '<div id="content"><h2><a href="/new/' + items[i].id + '">';
+						resultStr += '<div id="content"><h2><a href="' +PAGE_NEW + SYM_SEPARATE + items[i].id + '">';
 						resultStr += items[i].name + "</a>";
 						resultStr += '</h2><img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="';
 						resultStr += PUBLIC_DIR + IMAGE_DATA_DIR + SYM_SEPARATE + items[i].image;
@@ -94,7 +102,7 @@ app.get("/new",function(request,response){
 					//console.log(" total item : " + items.length);
 					
 					for(var i=0;i<items.length;i++){
-						resultStr += '<div id="content"><h2><a href="/new/' + items[i].id + '">';
+						resultStr += '<div id="content"><h2><a href="' +PAGE_NEW + SYM_SEPARATE + items[i].id + '">';
 						resultStr += items[i].name + "</a>";
 						resultStr += '</h2><img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="';
 						resultStr += PUBLIC_DIR + IMAGE_DATA_DIR + SYM_SEPARATE + items[i].image;
@@ -126,7 +134,7 @@ app.get("/new/:id",function(request,response){
 				query[FILM_ID] = value;
 
 				collection.findOne(query,function(err,result){
-					
+										
 				var resultRes = '<div id="content"><img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:250px; height: 320px;" src="';	
 				resultRes += PUBLIC_DIR + IMAGE_DATA_DIR + SYM_SEPARATE + result.image;
 				resultRes += '" alt="image" /><h2><b>';
@@ -135,7 +143,14 @@ app.get("/new/:id",function(request,response){
 				resultRes += result.date;
 				resultRes +=  '</p><p><b>Running time:</b>Time</p><p><b>Category:</b>Cate</p><p><b>Information:</b>';
 				resultRes += result.information;
-				resultRes +=  '</p></div>';
+				resultRes +=  '</p></div></p>';	
+				
+				resultRes += '<div class="fb-like" data-href="'+ HTTP_STRING + host + PAGE_NEW + SYM_SEPARATE +result.id;
+				resultRes += '" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>';
+				
+				resultRes += '<div class="fb-comments" data-href="' + HTTP_STRING + host + PAGE_NEW + SYM_SEPARATE +result.id;
+				resultRes +=  '" data-numposts="10" data-width="100%" data-colorscheme="light"></div>';
+				
 				if (err) throw err;
 				response.send(strHeader + resultRes + strFooter);	
 				});	
@@ -151,13 +166,5 @@ app.get('*', function(req, res){
 
 app.listen(port,host);
 var server = http.createServer(app);
-
-
-
-
-
-
-
-
 
 
