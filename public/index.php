@@ -12,12 +12,6 @@
 </head>
 <body>
 <div id="wrap">
-
-	<div id="header">
-		<h1>Simple #3</h1>
-		<h2>Website Slogan or Tagline</h2>
-	</div>
-
 	<div id="menu">
 		<ul>
     		<li><a href="pdc.php">PHIM ĐANG CHIẾU</a></li>
