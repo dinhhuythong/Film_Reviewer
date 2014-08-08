@@ -62,7 +62,7 @@ text-decoration: none;
 
 #content { background: #fff; padding: 10px 20px;text-decoration: none;}
 #content h2 { padding-top: 10px; font-weight: normal; font-size: 30px; color: #383838; text-decoration: none;}
-#content h3 { font-weight: normal; font-size: 21px; background: #fff88e; padding: 10px; color: red; text-decoration: none;}
+#content h3 { font-weight: normal; font-size: 21px; padding: 10px; color: red; text-decoration: none;}
 
 #footer { 
 background: #353535;

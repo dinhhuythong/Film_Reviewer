@@ -7,9 +7,6 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 <link rel="stylesheet" type="text/css" href="contactus.css" />
 <title>Simple Template #3 - simpletemplates.org</title>
-<?php 
-	include('connection.php');
-?>
 </head>
 <body>
 <div id="wrap">
@@ -24,8 +21,19 @@
 	</div>
 	 <div id="content">
 		<form id="contact" action="" method="post">
-			<h3>Quick Contact</h3>
+			<h3>Chat</h3>
 			<textarea id="text" name="text" rows="4" style="overflow: hidden; word-wrap: break-word; height: 281px; margin: 0px; width: 749px; " ></textarea>
+			<br/>
+			<input type="radio" name="name" id="rad1" checked /> <label for="rad1" onclick="" data-content="Option 1">Người lạ</label>&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="name" id="rad2" /> <label for="rad2" onclick="" data-content="Option 2">Tài khoản facebook</label>&nbsp;&nbsp;&nbsp;
+			<select>
+				<option selected>Tùy chọn</option>
+				<option>Địa điểm</option>
+				<option>Phim</option>
+				<option>Số người muốn rủ</option>
+			</select>
+			<div class="select-button"><div class="small-arrow-down"></div></div>
+
 			<br/>
 			Message: &nbsp;  <input placeholder="Your message" type="text" tabindex="1" />
 			<button onclick="send()" type="submit" id="contact-chat">Chat</button>
