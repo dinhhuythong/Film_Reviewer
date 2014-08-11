@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<% include header.ejs %>
+
+<body>
+<div id="wrap">
+	<% include menu.ejs %>
+		<% for(var i=0; i<content.length; i++) { %>
+				<div id="content"><h2><a href="<%= prelink + content[i].id  %>">
+				<%= content[i].nameFilm %></a>
+				</h2><img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="
+				<%= imgDir + content[i].image_medium %>" alt="image" />
+				<p><b>Information:</b></p>
+				<%= content[i].summary %>
+				</p>
+				Comments : <div class="aaa<%=i%>"></div>
+				Shares : <div class="bbb<%=i%>"></div>
+			
+				<div class="fb-like" data-href="<%= 'http://www.haivl.com/photo/400000' + content[i].id  %>" data-layout="box_count" 
+					data-action="like" data-show-faces="true" data-share="false"></div>
+				<div class="clear"> 
+				<script>
+				getFacebookCommentCount('<%= 'http://www.haivl.com/photo/300000' + content[i].id  %>', function(callback) {
+					  $('.aaa<%=i%>').html(callback['comments']);
+					  $('.bbb<%=i%>').html(callback['shares']);
+				});
+				</script>
+				</div></div>
+		<% } %>
+		
+	<% include footer.ejs %>
+</div>
+</body>
+</html>
+
+
+
+
+
+

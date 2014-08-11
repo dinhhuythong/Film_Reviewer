@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<% include header.ejs %>
+<body>
+<div id="wrap">
+	<% include menu.ejs %>
+		<div id="content">
+		<img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:250px; height: 320px;" src="	
+		<%= imgDir + item.image_large %>" alt="image" /><h2><b>
+		<%= item.nameFilm %></b></h2>
+		<p><b>Thể loại:</b><%= item.film_type %></p>
+		<p><b>Đạo diễn:</b><%= item.director %></p>
+		<p><b>Diễn viên:</b><%= item.actors %></p>
+		<p><b>Ngày chiếu:</b><%= item.realeaseDate %></p>
+		<p><b>Ngày đóng :</b><%= item.endDate %></p>
+		<p><b>Tình trạng:</b><%= item.status %></p>
+		<p><b>Nuớc SX:</b><%= item.country %></p>		
+		<p><b>Nhà SX:</b><%= item.manufactor %></p>		
+		<p><b>Tóm tắt:</b><%= item.summary %></p>		
+		
+		<p><b>Nội dung</b></p>
+		<%= item.information %>
+		</p>
+		</div>
+		
+		</p>		
+		<div class="fb-like" data-href="<%=fullprelink + item.id %>" 
+		data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+	
+		<div class="fb-comments" data-href=" <%=fullprelink + item.id%>" 
+		data-numposts="10" data-width="100%" data-colorscheme="light"></div>
+		
+	<% include footer.ejs %>
+</div>
+</body>
+</html>
+
+
+

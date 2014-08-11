@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="Simple Template #3 from simpletemplates.org" />
+<meta name="keywords" content="simple #3, template, simpletemplates.org" />
+<link rel="stylesheet" type="text/css" href="public/style.css" />
+<link rel="stylesheet" type="text/css" href="public/contactus.css" />
+<title><%= title %></title>
+</head>
+<script>
+// Load the SDK asynchronously
+(function(d){
+	//alert("trap 3");
+	var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+	if (d.getElementById(id)) {return;}
+	js = d.createElement('script'); 
+	js.id = id;
+	js.async = true;
+	js.src = "//connect.facebook.net/en_US/all.js";
+	ref.parentNode.insertBefore(js, ref);
+}(document));
+  window.fbAsyncInit = function() {
+		//alert("trap 1");  
+		FB.init({
+		  appId      : '529881747080553', // App ID likes
+		  channelUrl : 'http://localhost:1234/facebook/index.html', // Channel File
+		  status     : true, // check login status
+		  cookie     : true, // enable cookies to allow the server to access the session
+		  xfbml      : true  // parse XFBML
+		});
+		
+		FB.Event.subscribe('auth.authResponseChange', function(response) 
+		{
+		 //alert(response.status);
+		 if (response.status === 'connected') 
+			{
+				getUserInfo();
+			}
+		else if (response.status === 'not_authorized') 
+			{
+			} 
+		else if (response.status === 'unknown')  
+			{
+			}
+		});
+    };
+   	function Login()
+	{
+		//alert("trap 4");
+		FB.login(function(response) {
+			//alert(" after 1");
+		   if (response.authResponse) 
+		   {
+				//alert(" after 2");
+		    	getUserInfo();
+  			} else 
+  			{
+  	    	 console.log('User cancelled login or did not fully authorize.');
+   			}
+		 },{scope: 'email,user_photos,user_videos'});
+		//checkStatus();
+	}
+
+  function getUserInfo() {
+	  //alert("trap 5");
+	    FB.api('/me', function(response) {
+	  	  FB.api('/me/picture?type=normal', function(imgRes) {
+			var str='<a href="'+response.link+'" target="_blank" ><img height="75%" width="40" src="'+imgRes.data.url+'"/>';
+			document.getElementById("status").innerHTML =str; 	    
+			document.getElementById("acc").innerHTML =response.name;
+			document.getElementById("rad2").disabled = false;
+		  }); 
+    });
+    }
+
+	function Logout()
+	{
+		FB.logout(function(){document.location.reload();});
+	}
+	
+</script>
+<script>
+function getCurrentTime()
+{
+	// add time to message
+	var currentdate = new Date(); 
+	var datetime = "[" + currentdate.getDate() + "/" 
+	+ (currentdate.getMonth()+1)  + "/" 
+	+ currentdate.getFullYear() + " @ "  
+	+ currentdate.getHours() + ":"  
+	+ currentdate.getMinutes() + ":" 
+	+ currentdate.getSeconds() + "]";	
+	return datetime;
+}
+
+function inputKeyUp(e) {
+    e.which = e.which || e.keyCode;
+    if(e.which == 13) {
+        sendMsg();
+    }
+}
+function sendMsg()
+{
+	var EMIT_SEND_MESSAGE = '12792';
+	var REQ_CLIENT = 'request_client';
+	
+	
+	var receiver_ID = document.getElementById("receiver_sessionID").value;
+	var room_ID = document.getElementById("roomID").value;
+	var content = document.getElementById("content").value;
+	var self_ID = document.getElementById("self_sessionID").value;
+	
+	var socket = io.connect(document.domain);
+	var content = document.getElementById("text_content").value;
+	
+	document.getElementById("text").value += '\n' + getCurrentTime() +' Bạn : '+content;
+	// emit message to stranger
+	socket.emit(REQ_CLIENT,{id_rq: EMIT_SEND_MESSAGE, rev_id : receiver_ID , room_id: room_ID, sender_content : content, sender_id : self_ID});
+	
+	document.getElementById("text_content").value = "";
+}
+function sendConnectReq()
+{
+	var socket = io.connect(document.domain);
+	var sessionID = Math.floor(Math.random() * 1000000000000000); //15 letter number
+
+	$(document).ready(function(){	
+		//alert('1');
+		document.getElementById("self_sessionID").value = ""+sessionID;
+		//alert('test 1');
+		document.getElementById("contact-chat").innerHTML = " ----- Đang tìm kiếm  .. ------";
+		
+		
+		var EMIT_FIND_ANONYMOUS_CHATTER = '12799';
+		var EMIT_FIND_FACEBOOK_CHATTER = '12798';
+		
+		var RES_SERVER_HANDSHARK = 'HS_11711';
+		var RES_SERVER_GETMESSAGE = 'GM_11711';
+		
+		var REQ_CLIENT = 'request_client';
+				
+		//alert(socket);
+		socket.on('connect', function () {
+			// emit message to server to find chatter
+			socket.emit(REQ_CLIENT,{id_rq: EMIT_FIND_ANONYMOUS_CHATTER, id_sender: sessionID});
+		});
+		var self_ID = document.getElementById("self_sessionID").value;
+
+		// just listens by itself socket		
+		socket.on(RES_SERVER_HANDSHARK + sessionID,function(data){
+			// receiver ID
+			document.getElementById("receiver_sessionID").value = ""+data.rev_ID;
+			// roomID
+			document.getElementById("roomID").value = "" + data.room_id;
+			$("#contact").show();
+			var stringDis = '<textarea readonly id="text" name="text" style="overflow-y: scroll;resize:none;background:#FFF;'+
+					'border:none; word-wrap: break-word; margin: 0px; width: 100%;max-height:100%;min-height:100%; " >'+
+					getCurrentTime() + 'Bạn đã vào phòng chat' + '</textarea>'
+			$('#display').html(stringDis);	
+
+			// handsharked , so that it 's ready to get message
+			socket.on(RES_SERVER_GETMESSAGE + sessionID, function (data) {        
+					document.getElementById("text").value += '\n' + getCurrentTime() +' Nguời lạ : '+data.sender_content;
+			});	
+		});
+	});
+}
+
+$(document).ready(function(){			
+  var strHtml = '<input style="margin-left:12px;"type="radio" name="name" id="rad1" checked />' +
+				'<label style="margin-right:12px;" for="rad1" onclick="" data-content="Option 1">Người lạ</label>'+
+				'<input type="radio" name="name" id="rad2" disabled />'+
+				'<label id="acc" "margin-right:12px;" for="rad2" data-content="Option 2">facebook(checking ..)</label><br/>'+
+				'<select style="margin-left:12px;"><option selected disabled>Địa điểm</option>'+
+				'<option>TPHCM</option><option>Hà Nội</option><option>Đà Nẵng</option></select>'+
+				'<select style="margin-left:12px;"><option selected disabled>Phim</option>'+
+				'<option>Phim 1</option><option>Phim 2</option><option>Phim 3</option></select>'+
+				'<button style="margin-left:12px;" onclick="sendConnectReq()" type="submit" id="contact-chat" >---  Tìm bạn xem phim cùng ---</button>';
+  $("#contact").hide();
+  $('#display').html(strHtml);
+});
+</script>
+<body>
+<div id="fb-root"></div>
+
+<div id="wrap">
+	 <% include menu.ejs %>
+	 <div id="content">
+		<div id="display" name="text" style="padding-top:12px;height:300px;width:100%;border:1px solid #CCC;background:#FFF;">	
+		</div>
+		<div id="contact">	
+			<div class="select-button"><div class="small-arrow-down"></div></div>
+			Message:<input id="text_content" placeholder="Your message" type="text" tabindex="1" onkeyup="inputKeyUp(event)"/>
+			<button onclick="sendMsg()" type="submit" id="contact-chat">Chat</button>
+		</div>
+		<!-- roomID is a special number, it is a crypto product from sender and receiver session with a special key from server
+			 So that, it seems to be careful from attacking.
+		 -->
+		<input type="hidden" id="self_sessionID" name="sessionID" value="" />
+		<input type="hidden" id="receiver_sessionID" name="revID" value="" />
+		<input type="hidden" id="roomID" name="rID" value="" />
+	</div>
+	<div class="footer">
+		<% include footer.ejs %>
+	</div>
+</div>
+</body>
+</html>

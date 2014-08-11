@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/public/style.css" />
+<link rel="stylesheet" type="text/css" href="/public/contactus.css" />
+<title><%= title %></title>
+</head>
+<script>
+// Load the SDK asynchronously
+(function(d){
+	//alert("trap 3");
+	var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+	if (d.getElementById(id)) {return;}
+	js = d.createElement('script'); 
+	js.id = id;
+	js.async = true;
+	js.src = "//connect.facebook.net/en_US/all.js";
+	ref.parentNode.insertBefore(js, ref);
+}(document));
+  window.fbAsyncInit = function() {
+		//alert("trap 1");  
+		FB.init({
+		  appId      : '529881747080553', // App ID
+		  channelUrl : 'http://localhost:1234/facebook/index.html', // Channel File
+		  status     : true, // check login status
+		  cookie     : true, // enable cookies to allow the server to access the session
+		  xfbml      : true  // parse XFBML
+		});
+		
+		FB.Event.subscribe('auth.authResponseChange', function(response) 
+		{
+		 //alert(response.status);
+		 if (response.status === 'connected') 
+			{
+				getUserInfo();
+			}
+		else if (response.status === 'not_authorized') 
+			{
+			} 
+		else if (response.status === 'unknown')  
+			{
+			}
+		});
+    };
+   	function Login()
+	{
+		//alert("trap 4");
+		FB.login(function(response) {
+			//alert(" after 1");
+		   if (response.authResponse) 
+		   {
+				//alert(" after 2");
+		    	getUserInfo();
+  			} else 
+  			{
+  	    	 console.log('User cancelled login or did not fully authorize.');
+   			}
+		 },{scope: 'email,user_photos,user_videos'});
+		//checkStatus();
+	}
+
+  function getUserInfo() {
+	  //alert("trap 5");
+	    FB.api('/me', function(response) {
+	  	  FB.api('/me/picture?type=normal', function(imgRes) {
+			var str='<a href="'+response.link+'" target="_blank" ><img height="40" width="40" src="'+imgRes.data.url+'"/>';
+			document.getElementById("status").innerHTML =str; 	    
+			document.getElementById("acc").innerHTML =response.name;
+			document.getElementById("rad2").disabled = false;
+		  }); 
+    });
+    }
+
+	function Logout()
+	{
+		FB.logout(function(){document.location.reload();});
+	}
+	
+</script>
+<script>
+function send()
+{
+	document.getElementById("contact-chat").innerHTML = " ----- Đang tìm kiếm  .. ------";
+	alert("123");
+	$(document).ready(function(){			
+		$("form").show();
+		$('#display').html('<textarea disabled id="text" name="text" rows="4" style="resize:none;background:#FFF;border:none;overflow: hidden; word-wrap: break-word; height: 281px; margin: 0px; width: 100%; " >Chào mừng bạn đã vào phòng chat</textarea>');
+	});
+}
+
+$(document).ready(function(){			
+  var strHtml = '<input style="margin-left:12px;"type="radio" name="name" id="rad1" checked />' +
+				'<label style="margin-right:12px;" for="rad1" onclick="" data-content="Option 1">Người lạ</label>'+
+				'<input type="radio" name="name" id="rad2" disabled />'+
+				'<label id="acc" "margin-right:12px;" for="rad2" data-content="Option 2">facebook(checking ..)</label><br/>'+
+				'<select style="margin-left:12px;"><option selected disabled>Địa điểm</option>'+
+				'<option>TPHCM</option><option>Hà Nội</option><option>Đà Nẵng</option></select>'+
+				'<select style="margin-left:12px;"><option selected disabled>Phim</option>'+
+				'<option>Phim 1</option><option>Phim 2</option><option>Phim 3</option></select>'+
+				'<button style="margin-left:12px;" onclick="send()" type="submit" id="contact-chat" >---  Tìm bạn xem phim cùng ---</button>';
+  $("form").hide();
+  $('#display').html(strHtml);
+  //$('#display').load('./frame_init_chat.html');
+  //$('#text').val($('#area').val()+'foobar'); 
+});
+</script>
+<body>
+<div id="fb-root"></div>
+
+<div id="wrap">
+	<% include menu.ejs %>
+	
+	 <div id="content">
+		<div id="display" name="text" style="padding-top:12px;height:300px;width:100%;border:1px solid #CCC;background:#FFF;">	
+		</div>
+		<form id="contact" action="" method="post">	
+			<div class="select-button"><div class="small-arrow-down"></div></div>
+			Message:<input placeholder="Your message" type="text" tabindex="1" />
+			<button onclick="send()" type="submit" id="contact-chat">Chat</button>
+		</form>
+	</div>
+	
+	<% include footer.ejs %>
+</div>
+</body>
+</html>
