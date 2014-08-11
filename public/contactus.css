@@ -5,20 +5,14 @@
 }
 
 
-#contact input[type="text"], #contact input[type="email"], #contact textarea, #contact button[type="submit"] { font:400 12px/16px "Open Sans", Helvetica, Arial, sans-serif; }
+#contact input[type="text"], #contact input[type="email"], #contact button[type="submit"] { font:400 12px/16px "Open Sans", Helvetica, Arial, sans-serif; }
 
-#contact input[type="text"], #contact input[type="email"], #contact textarea {
+#contact input[type="text"], #contact input[type="email"]{
 	width:740px;
 	border:1px solid #CCC;
 	background:#FFF;
 	margin:0 0 5px;
 	padding:10px;
-}
-
-#contact textarea {
-	height:100px;
-	max-width:740px;
-	resize:none;
 }
 
 #contact button[type="submit"] {

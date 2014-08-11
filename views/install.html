@@ -1,0 +1,38 @@
+<html>
+<script>
+
+function changeCheckBox()
+{
+	if(document.getElementById("state").value == "true")
+		document.getElementById("state").value = "false";
+	else
+		document.getElementById("state").value = "true";
+}
+</script>
+<body>
+
+<div style="position:absolute;background-color: #f3f3f3;text-align:center;">
+<h1>Khởi tạo webserver</h1>
+<hr/>
+<form id="installForm" action="/install" method="post" onSubmit="if(!confirm('Bạn có chắc chắn về dữ liệu và sẵn sàng khởi tạo chưa ?')){return false;}">
+<p> Server Domain </p>
+<input type="text" id="serDo" name="serDo"/>
+<p> Server Port </p>
+<input type="text" id="serPort" name="serPort"/>
+
+<p> Database Domain </p>
+<input type="text" id="dbDo" name="dbDo"/>
+<p> Database Port </p>
+<input type="text" id="dbPort" name="dbPort"/>
+<p> Database Name </p>
+<input type="text" id="dbName" name="dbName"/>
+
+<p> Chú ý : CSDL không nên bị trùng,quá trình khởi tạo sẽ KHÔNG CHO PHÉP ghi đè lên bản ghi, tuy nhiên nếu muốn ghi đè,check check box </p>
+<input type="checkbox" name="overide" value="No" onchange="changeCheckBox()" />Sẵn sàng ghi đè lên csdl<br/><br/>
+<input type="hidden" id="state" name="overide" value="false" />
+<input type="submit" />
+</form>
+</div>
+
+</body>
+</html>
