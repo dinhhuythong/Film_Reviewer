@@ -1,8 +1,32 @@
+<script>
+$.ajaxSetup({timeout:1000});
+$(document).ready(function() {
+	$("#newfilmPage").click(function(){
+		$.get("/ajax/new", function(items) {
+			var content="";
+			for(var i=0; i<content.length; i++) {
+					content = '<div id="content"><h2><a href="'content[i].id  +'">'+
+					content[i].nameFilm +'</a></h2><img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:180px; height: 250px;" src="'+
+					imgDir + content[i].image_medium + '" alt="image" /><p><b>Information:</b></p>'+
+					content[i].summary + '</p>Comments : <div class="aaa'+ i +'"></div>Shares : <div class="bbb'+i+'"></div>'+				
+					'<div class="fb-like" data-href="http://www.haivl.com/photo/400000' +content[i].id +'" data-layout="box_count"'+ 
+					'data-action="like" data-show-faces="true" data-share="false"></div><div class="clear"></div></div>';
+					getFacebookCommentCount("http://www.haivl.com/photo/300000" + content[i].id , function(callback) {
+						  $('.aaa'+i).html(callback['comments']);
+						  $('.bbb'+i).html(callback['shares']);
+					});			
+			} 
+			$("#subwrap").html(content);
+		});	
+	});
+});
+
+</script>
 <div id="menu">
 	<ul>
 		<li><a href="/"><img height="40" witdh="40" src="/public/image/poster/logo.png" /></a></li>
 		<li><a href="/dangchieu">ĐANG CHIẾU</a></li>
-		<li><a href="/sapchieu">SẮP CHIẾU</a></li>
+		<li id="newfilmPage">SẮP CHIẾU</li>
 		<li><a href="/dachieu">ĐÃ CHIẾU</a></li>
 		<li><a href="/chat">RỦ RÊ XEM PHIM</a></li>
 		<li><a href="/lienhe">LIÊN HỆ</a></li>

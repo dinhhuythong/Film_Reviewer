@@ -5,6 +5,7 @@
 <body>
 <div id="wrap">
 	<% include menu.ejs %>
+		<div id="subwrap">
 		<% for(var i=0; i<content.length; i++) { %>
 				<div id="content"><h2><a href="<%= prelink + content[i].id  %>">
 				<%= content[i].nameFilm %></a>
@@ -27,7 +28,7 @@
 				</script>
 				</div></div>
 		<% } %>
-		
+		</div>
 	<% include footer.ejs %>
 </div>
 </body>
