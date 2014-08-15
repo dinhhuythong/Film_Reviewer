@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="Simple Template #3 from simpletemplates.org" />
@@ -83,6 +82,7 @@
 	
 </script>
 <script>
+
 function getCurrentTime()
 {
 	// add time to message
@@ -109,7 +109,7 @@ function sendMsg()
 	
 	
 	var receiver_ID = document.getElementById("receiver_sessionID").value;
-	var room_ID = document.getElementById("roomID").value;
+	//var room_ID = document.getElementById("roomID").value;
 	var content = document.getElementById("content").value;
 	var self_ID = document.getElementById("self_sessionID").value;
 	
@@ -118,16 +118,29 @@ function sendMsg()
 	
 	document.getElementById("text").value += '\n' + getCurrentTime() +' Bạn : '+content;
 	// emit message to stranger
-	socket.emit(REQ_CLIENT,{id_rq: EMIT_SEND_MESSAGE, rev_id : receiver_ID , room_id: room_ID, sender_content : content, sender_id : self_ID});
+	socket.emit(REQ_CLIENT,{id_rq: EMIT_SEND_MESSAGE, rev_id : receiver_ID , sender_content : content, sender_id : self_ID});
 	
 	document.getElementById("text_content").value = "";
+}
+function receiveMsg()
+{
+	document.title  = 'Rủ nhau xem phim';
+	rev_msg_count = 1;
 }
 function sendConnectReq()
 {
 	var socket = io.connect(document.domain);
 	var sessionID = Math.floor(Math.random() * 1000000000000000); //15 letter number
+	var rev_msg_count = 1;
+	
+	//style.display = 'none'
+	//$(document).ready(function(){	
+		// no need
+		//$( "#text_content" ).focus(function() {
+		//	document.title  = 'Rủ nhau xem phim';
+		//	rev_msg_count = 1;
+		//});
 
-	$(document).ready(function(){	
 		//alert('1');
 		document.getElementById("self_sessionID").value = ""+sessionID;
 		//alert('test 1');
@@ -146,6 +159,9 @@ function sendConnectReq()
 		socket.on('connect', function () {
 			// emit message to server to find chatter
 			socket.emit(REQ_CLIENT,{id_rq: EMIT_FIND_ANONYMOUS_CHATTER, id_sender: sessionID});
+			socket.on('disconnect', function () {
+				document.getElementById("text").value += '\n' + getCurrentTime() +' Nguời lạ đã bỏ bạn ra đi';	
+			});
 		});
 		var self_ID = document.getElementById("self_sessionID").value;
 
@@ -154,22 +170,29 @@ function sendConnectReq()
 			// receiver ID
 			document.getElementById("receiver_sessionID").value = ""+data.rev_ID;
 			// roomID
-			document.getElementById("roomID").value = "" + data.room_id;
-			$("#contact").show();
+			//document.getElementById("roomID").value = "" + data.room_id;
+			
+			document.getElementById("contact").style.display = 'block';
+			//$("#contact").show();
 			var stringDis = '<textarea readonly id="text" name="text" style="overflow-y: scroll;resize:none;background:#FFF;'+
 					'border:none; word-wrap: break-word; margin: 0px; width: 100%;max-height:100%;min-height:100%; " >'+
 					getCurrentTime() + 'Bạn đã vào phòng chat' + '</textarea>'
-			$('#display').html(stringDis);	
-
+			//innerHTML
+			//$('#display').html(stringDis);	
+			document.getElementById("display").innerHTML = stringDis;
 			// handsharked , so that it 's ready to get message
-			socket.on(RES_SERVER_GETMESSAGE + sessionID, function (data) {        
+			socket.on(RES_SERVER_GETMESSAGE + sessionID, function (data) {      
+					document.title  = '[' + rev_msg_count + ']Nguời lạ nhắn tin ..';
+					rev_msg_count ++;
+					//runningTitleMsg(data.sender_content);
 					document.getElementById("text").value += '\n' + getCurrentTime() +' Nguời lạ : '+data.sender_content;
 			});	
 		});
-	});
+	//});
 }
 
-$(document).ready(function(){			
+//$(document).ready(function(){			
+function initPage(){	
   var strHtml = '<input style="margin-left:12px;"type="radio" name="name" id="rad1" checked />' +
 				'<label style="margin-right:12px;" for="rad1" onclick="" data-content="Option 1">Người lạ</label>'+
 				'<input type="radio" name="name" id="rad2" disabled />'+
@@ -179,11 +202,14 @@ $(document).ready(function(){
 				'<select style="margin-left:12px;"><option selected disabled>Phim</option>'+
 				'<option>Phim 1</option><option>Phim 2</option><option>Phim 3</option></select>'+
 				'<button style="margin-left:12px;" onclick="sendConnectReq()" type="submit" id="contact-chat" >---  Tìm bạn xem phim cùng ---</button>';
-  $("#contact").hide();
-  $('#display').html(strHtml);
-});
+  //$("#contact").hide();
+  document.getElementById("contact").style.display = 'none';
+  document.getElementById("display").innerHTML = strHtml;
+ }
+  //$('#display').html(strHtml);
+//});
 </script>
-<body>
+<body onload="initPage()">
 <div id="fb-root"></div>
 
 <div id="wrap">
@@ -193,7 +219,7 @@ $(document).ready(function(){
 		</div>
 		<div id="contact">	
 			<div class="select-button"><div class="small-arrow-down"></div></div>
-			Message:<input id="text_content" placeholder="Your message" type="text" tabindex="1" onkeyup="inputKeyUp(event)"/>
+			Message:<input id="text_content" placeholder="Your message" type="text" tabindex="1" onfocus="receiveMsg()" onkeyup="inputKeyUp(event)"/>
 			<button onclick="sendMsg()" type="submit" id="contact-chat">Chat</button>
 		</div>
 		<!-- roomID is a special number, it is a crypto product from sender and receiver session with a special key from server
