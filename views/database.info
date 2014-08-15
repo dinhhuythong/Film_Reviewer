@@ -1,0 +1,12 @@
+database :
+
+// colletion current Films
+cl_currentFilms(id, nameFilm, film_type , director, actor, realeaseDate, endDate , status , imdb_rate , fr_rate , information,
+summary,poll :'27-80-92-22' , image_tiny , image_medium , image_large, country , manufactor , commentCount, likesCount);
+
+// collection all films
+cl_generalFilms(id, nameFilm, film_type , director, actor, realeaseDate, endDate , status , imdb_rate , fr_rate , information,
+summary,poll :'27-80-92-22' , image_tiny , image_medium , image_large, country , manufactor , commentCount, likesCount);
+
+// collection feedback
+cl_feedback (namefeedbacker, content, title, time, emailfeedbacker)
