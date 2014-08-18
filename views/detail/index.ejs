@@ -1,39 +1,173 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<% include header.ejs %>
-<body>
-<div id="wrap">
-	<% include menu.ejs %>
-		<div id="content">
-		<img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:250px; height: 320px;" src="	
-		<%= imgDir + item.image_large %>" alt="image" /><h2><b>
-		<%= item.nameFilm %></b></h2>
-		<p><b>Thể loại:</b><%= item.film_type %></p>
-		<p><b>Đạo diễn:</b><%= item.director %></p>
-		<p><b>Diễn viên:</b><%= item.actors %></p>
-		<p><b>Ngày chiếu:</b><%= item.realeaseDate %></p>
-		<p><b>Ngày đóng :</b><%= item.endDate %></p>
-		<p><b>Tình trạng:</b><%= item.status %></p>
-		<p><b>Nuớc SX:</b><%= item.country %></p>		
-		<p><b>Nhà SX:</b><%= item.manufactor %></p>		
-		<p><b>Tóm tắt:</b><%= item.summary %></p>		
-		
-		<p><b>Nội dung</b></p>
-		<%= item.information %>
-		</p>
-		</div>
-		
-		</p>		
-		<div class="fb-like" data-href="<%=fullprelink + item.id %>" 
-		data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+<!DOCTYPE html>
+<html>
+        <head>
+                <title><%- title -%></title>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link href = "/public/css/bootstrap.min.css" rel = "stylesheet">
+                <link href = "/public/css/styles.css" rel = "stylesheet">
+				<script src = "/public/js/jquery-2.1.1.min.js"></script>
+				<script src = "/public/js/bootstrap.js"></script>       
+				<div id="fb-root"></div>
+				<script>(function(d, s, id) {
+				  var js, fjs = d.getElementsByTagName(s)[0];
+				  if (d.getElementById(id)) return;
+				  js = d.createElement(s); js.id = id;
+				  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
+				  fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));
+				</script>
+  
+        </head>
+        <body>
+ 
+                <div class = "navbar navbar-inverse navbar-fixed-top" role="navigation" >
+                <div class="navbar-inner ">
+                                 <div class = "container-fluid" style="max-width: 95%">
+                                     <a class="navbar-brand" rel="home" href="/" title="Cùng đi xem phim">
+										<img style="margin-top: -7px;" src="/public/image/template/logo.png"> 
+										Xem Xi Nê
+									</a>
+
+                                <button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
+                                        <span class = "icon-bar"></span>
+                                        <span class = "icon-bar"></span>
+                                        <span class = "icon-bar"></span>
+                                </button>
+
+                                <div class = "collapse navbar-collapse navHeaderCollapse">
+                               
+                                        <ul class = "nav navbar-nav navbar-right">
+                                       
+                                                <li class = "active"><a href = "/dangchieu" title="Các bộ phim đang khởi chiếu "> Đang chiếu </a></li>
+                                                <li><a href = "/sapchieu" title="Các bộ phim sắp ra mắt ">Sắp chiếu </a></li>
+                                                <li><a href = "/chat" title="Chat với nguời lạ, rủ rê đi xem phim cùng, mảnh đất màu mỡ của FA ">Rủ nhau xem phim</a></li>                                                
+                                                <li>
+                       							  <form id = "submitform" class="navbar-form navbar-left" role="search" action="/index.htm" method="get">
+													<input type="text" name="textsearch" class="form-control" placeholder="Tìm phim ...">
+													<a id="buttonSearch" title="Tìm kiếm các bộ phim" onclick="submitA()"><img src = "/public/image/template/search.png" /></a>					
+													</form>
+                                                </li>
+                                        </ul>
+                               
+                                </div>
+                               
+                        </div>
+                        </div>
+                </div>
+ 
+        <div class = "container" style="margin-top:80px;margin-bottom:60px;">
+              
+						<div class = "col-lg-9">                 
+								<div class = "panel panel-default">
+									<div class = "panel-body">	
+										<div class = "col-xs-12 col-sm-4 col-lg-4" >
+											<img style="margin: 0 20px 20px 0; float: left; margin: 0 20px 0 0; width:100%;height:100%;" src="	
+											<%= imgDir + item.image_large %>" alt="image" />
+										</div>
+										<div class = "col-xs-12 col-sm-8 col-lg-8" >
+											<h2 id="title" style="margin-top:5px;"><%= item.nameFilm %></b></h2>
+											<p><b>Thể loại:</b><%= item.film_type %></p>
+											<p><b>Đạo diễn:</b><%= item.director %></p>
+											<p><b>Diễn viên:</b><%= item.actors %></p>
+											<p><b>Ngày chiếu:</b><%= item.realeaseDate %></p>
+											<p><b>Ngày đóng :</b><%= item.endDate %></p>
+											<p><b>Tình trạng:</b><%= item.status %></p>
+											<p><b>Nuớc SX:</b><%= item.country %></p>		
+											<p><b>Nhà SX:</b><%= item.manufactor %></p>		
+											<p><b>Tóm tắt:</b><%= item.summary %></p>											
+											
+										</div>
+										<div class = "col-xs-12 col-sm-12 col-lg-12" >
+										<hr/>
+											<p><%= item.information %></p>
+											<div class="fb-like" data-href="<%=fullprelink + item.id %>" 
+												data-layout="standard" data-action="like" data-show-faces="true" data-share="true">
+											</div>
 	
-		<div class="fb-comments" data-href=" <%=fullprelink + item.id%>" 
-		data-numposts="10" data-width="100%" data-colorscheme="light"></div>
-		
-	<% include footer.ejs %>
-</div>
-</body>
+											<div class="fb-comments" data-href=" <%=fullprelink + item.id%>" 
+												data-numposts="10" data-width="100%" data-colorscheme="light">
+											</div>
+										</div>
+									</div>  								                                
+								</div>
+						</div>      
+
+
+
+          
+						<div class = " col-lg-3">						
+							<div class = "list-group" style="margin-left: -2px;margin-right: -2px;">
+									<div id="row">
+											<div class = " col-xs-12 col-sm-6 col-lg-12" style="padding-left: 2px;padding-right: 2px;">
+												<div class = "list-group-item" style="margin-bottom: 20px;background-color:#819FF7;color:#FFFFFF;">
+													<p class = "list-group-item-text"><font color="#3B0B17" size="5"><strong> Mẹo : </strong></font>Vào <a href="facebook.com" target="_blank" style="color:#0B0B61"><strong>Facebook</strong></a> để có thể review những bộ phim bạn đã xem và chia sẻ cùng bạn bè.</p>
+													<p>Nếu không vào đuợc,<a href="/" target="_blank" style="color:#0B0B61"><strong>xem hướng dẫn tại đây</strong></a></p>
+												</div>
+											</div>
+											<div class = " col-xs-12 col-sm-6 col-lg-12"  style="padding-left: 2px;padding-right: 2px;">
+												<div class = "list-group-item" style="margin-bottom: 20px;background-color:#F8E0F7;text-align:center;">
+													<h4 class = "list-group-item-heading"><img src = "/public/image/template/facebook-icon.png" />Facebook Page</h4>
+													<hr style="margin-top:10px;margin-bottom:12px;"/>
+													<p class = "list-group-item-text">Hãy Like để ủng hộ <a href="/"><strong>CungDiXiNe</strong></a> bạn nhé</p>
+												</div>
+											</div>
+											<div class = " col-xs-12 col-sm-6 col-lg-12" style="padding-left: 2px;padding-right: 2px;">
+												<div class = "list-group-item" style="margin-bottom: 20px;background-color:#F2F2F2;text-align:center;">
+													<h4 class = "list-group-item-heading"><a href="/chat" target="_blank" >Cùng nhau xem phim</a></h4>
+													<hr style="margin-top:8px;margin-bottom:8px;"/>
+													<p class = "list-group-item-text">Mảnh đất màu mỡ của các FA.Rủ nguời lạ xem phim bạn nhé ^^</p>	
+												</div>
+											</div>
+											<div class = " col-xs-12 col-sm-6 col-lg-12" style="padding-left: 2px;padding-right: 2px;">
+												<div class = "list-group-item" style="margin-bottom: 20px;background-color:#FAFAFA;color:#642EFE;text-align:center;">
+													<h4 class = "list-group-item-heading"><strong>Các Rạp Chiếu Phim</strong></h4>
+													<hr style="margin-top:8px;margin-bottom:8px;"/>
+													<p class = "list-group-item-text"><a href="https://www.galaxycine.vn" target="_blank"><img title="Rạp Galaxy" width="100%" src = "/public/image/cinema/galaxy.png" /></a></p>
+													<p class = "list-group-item-text"><a href="https://www.cgv.vn" target="_blank"><img  title="Rạp Lotte"  width="100%" src = "/public/image/cinema/lotte.jpg" /></a></p>
+													<p class = "list-group-item-text"><a href="http://lottecinemavn.com" target="_blank"><img  title="Rạp cgv"  width="100%" src = "/public/image/cinema/cgv.png" /></a></p>
+													<p class = "list-group-item-text"><a href="http://www.platinumcineplex.vn" target="_blank"><img  title="Rạp Platinum Cineplex" width="100%" src = "/public/image/cinema/vincom.png" /></a></p>	
+												</div>
+											</div>
+
+									<!-- end row-->	
+									</div>
+							</div>							
+						</div>
+                       
+                       
+                       
+                       
+					</div>  
+			</div>
+			<div class = "navbar navbar-default navbar-fixed-bottom">
+		   
+			</div>
+            
+            <!-- Contact Page-->
+			<div class = "modal fade" id = "contact" role = "dialog">
+				<div class = "modal-dialog">
+					<div class = "modal-content">
+						<div class = "modal-header">
+							<h4>Contact Tech Site</h4>
+						</div>
+						<div class = "modal-body">
+							<p>Test Trang Lien He</p>
+						</div>
+						<div class = "modal-footer">
+					<a class = "btn btn-primary" data-dismiss = "modal">Dong Y</a>    
+							<a class = "btn btn-default" data-dismiss = "modal">Close</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+						
+			<div class = "navbar navbar-default navbar-fixed-bottom">
+		   
+					<div class = "container">
+							<p class = "navbar-text pull-left"><a href = "#contact" data-toggle="modal">Contact</a> · Giới thiệu · FAQ · Điều khoản · RSS · Cách vào Facebook </p>					
+					</div>		   
+			</div>               
+        </body>
 </html>
-
-
-

@@ -5,8 +5,10 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="Simple Template #3 from simpletemplates.org" />
 <meta name="keywords" content="simple #3, template, simpletemplates.org" />
-<link rel="stylesheet" type="text/css" href="public/style.css" />
-<link rel="stylesheet" type="text/css" href="public/contactus.css" />
+<link href = "public/css/bootstrap.min.css" rel = "stylesheet">
+<link href = "public/css/styles.css" rel = "stylesheet">
+<script src = "public/js/jquery-2.1.1.min.js"></script>
+<script src = "public/js/bootstrap.js"></script>    
 <title><%= title %></title>
 </head>
 <script>
@@ -67,8 +69,7 @@
 	  //alert("trap 5");
 	    FB.api('/me', function(response) {
 	  	  FB.api('/me/picture?type=normal', function(imgRes) {
-			var str='<a href="'+response.link+'" target="_blank" ><img height="75%" width="40" src="'+imgRes.data.url+'"/>';
-			document.getElementById("status").innerHTML =str; 	    
+			document.getElementById("facebook_loader").src =imgRes.data.url; 		    
 			document.getElementById("acc").innerHTML =response.name;
 			document.getElementById("rad2").disabled = false;
 		  }); 
@@ -82,7 +83,16 @@
 	
 </script>
 <script>
-
+//compare for emoticon yahoo
+//https://s.yimg.com/lq/i/mesg/emoticons7/1.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/2.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/3.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/4.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/5.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/6.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/7.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/8.gif :)
+//https://s.yimg.com/lq/i/mesg/emoticons7/9.gif :)
 function getCurrentTime()
 {
 	// add time to message
@@ -102,11 +112,16 @@ function inputKeyUp(e) {
         sendMsg();
     }
 }
+function receiveMessage(message) {
+    //adding new message and scrolldown
+    $("#text").append(message);
+    $('#text').scrollTop($('#text')[0].scrollHeight);
+}
+
 function sendMsg()
 {
 	var EMIT_SEND_MESSAGE = '12792';
 	var REQ_CLIENT = 'request_client';
-	
 	
 	var receiver_ID = document.getElementById("receiver_sessionID").value;
 	//var room_ID = document.getElementById("roomID").value;
@@ -116,7 +131,8 @@ function sendMsg()
 	var socket = io.connect(document.domain);
 	var content = document.getElementById("text_content").value;
 	
-	document.getElementById("text").value += '\n' + getCurrentTime() +' Bạn : '+content;
+	//document.getElementById("text").innerHTML += ;
+	receiveMessage('<br/><font color="#848484">' + getCurrentTime() +' <strong>Bạn :</strong> </font>'+content);
 	// emit message to stranger
 	socket.emit(REQ_CLIENT,{id_rq: EMIT_SEND_MESSAGE, rev_id : receiver_ID , sender_content : content, sender_id : self_ID});
 	
@@ -129,6 +145,9 @@ function receiveMsg()
 }
 function sendConnectReq()
 {
+	document.getElementById("findChatter").innerHTML = 'Đang tìm....';
+	document.getElementById("findChatter").disabled = true;
+	
 	var socket = io.connect(document.domain);
 	var sessionID = Math.floor(Math.random() * 1000000000000000); //15 letter number
 	var rev_msg_count = 1;
@@ -143,9 +162,6 @@ function sendConnectReq()
 
 		//alert('1');
 		document.getElementById("self_sessionID").value = ""+sessionID;
-		//alert('test 1');
-		document.getElementById("contact-chat").innerHTML = " ----- Đang tìm kiếm  .. ------";
-		
 		
 		var EMIT_FIND_ANONYMOUS_CHATTER = '12799';
 		var EMIT_FIND_FACEBOOK_CHATTER = '12798';
@@ -160,7 +176,7 @@ function sendConnectReq()
 			// emit message to server to find chatter
 			socket.emit(REQ_CLIENT,{id_rq: EMIT_FIND_ANONYMOUS_CHATTER, id_sender: sessionID});
 			socket.on('disconnect', function () {
-				document.getElementById("text").value += '\n' + getCurrentTime() +' Nguời lạ đã bỏ bạn ra đi';	
+				receiveMessage('<br/><font color="red">' + getCurrentTime() +' Nguời lạ đã bỏ bạn ra đi</font>');
 			});
 		});
 		var self_ID = document.getElementById("self_sessionID").value;
@@ -174,53 +190,141 @@ function sendConnectReq()
 			
 			document.getElementById("contact").style.display = 'block';
 			//$("#contact").show();
-			var stringDis = '<textarea readonly id="text" name="text" style="overflow-y: scroll;resize:none;background:#FFF;'+
-					'border:none; word-wrap: break-word; margin: 0px; width: 100%;max-height:100%;min-height:100%; " >'+
-					getCurrentTime() + 'Bạn đã vào phòng chat' + '</textarea>'
+			var stringDis = '<div readonly id="text" name="text" style="overflow-y: scroll;height:360px;width: 100%;"><font color="red">'+
+					getCurrentTime() + 'Bạn đã vào phòng chat' + '</font></div>'
 			//innerHTML
 			//$('#display').html(stringDis);	
+
 			document.getElementById("display").innerHTML = stringDis;
 			// handsharked , so that it 's ready to get message
 			socket.on(RES_SERVER_GETMESSAGE + sessionID, function (data) {      
 					document.title  = '[' + rev_msg_count + ']Nguời lạ nhắn tin ..';
 					rev_msg_count ++;
 					//runningTitleMsg(data.sender_content);
-					document.getElementById("text").value += '\n' + getCurrentTime() +' Nguời lạ : '+data.sender_content;
+					//document.getElementById("text").innerHTML += ;
+					
+					receiveMessage('<br/><font color="#2E2EFE">' + getCurrentTime() +'<strong> Nguời lạ :</strong> </font>'+data.sender_content);
 			});	
 		});
 	//});
 }
 
-//$(document).ready(function(){			
-function initPage(){	
-  var strHtml = '<input style="margin-left:12px;"type="radio" name="name" id="rad1" checked />' +
-				'<label style="margin-right:12px;" for="rad1" onclick="" data-content="Option 1">Người lạ</label>'+
-				'<input type="radio" name="name" id="rad2" disabled />'+
-				'<label id="acc" "margin-right:12px;" for="rad2" data-content="Option 2">facebook(checking ..)</label><br/>'+
-				'<select style="margin-left:12px;"><option selected disabled>Địa điểm</option>'+
-				'<option>TPHCM</option><option>Hà Nội</option><option>Đà Nẵng</option></select>'+
-				'<select style="margin-left:12px;"><option selected disabled>Phim</option>'+
-				'<option>Phim 1</option><option>Phim 2</option><option>Phim 3</option></select>'+
-				'<button style="margin-left:12px;" onclick="sendConnectReq()" type="submit" id="contact-chat" >---  Tìm bạn xem phim cùng ---</button>';
-  //$("#contact").hide();
-  document.getElementById("contact").style.display = 'none';
-  document.getElementById("display").innerHTML = strHtml;
- }
-  //$('#display').html(strHtml);
-//});
 </script>
-<body onload="initPage()">
 <div id="fb-root"></div>
 
-<div id="wrap">
-	 <% include menu.ejs %>
+<body>
+
+                <div class = "navbar navbar-inverse navbar-fixed-top" role="navigation" >
+                <div class="navbar-inner ">
+                                 <div class = "container-fluid" style="max-width: 95%">
+                                     <a class="navbar-brand" rel="home" href="/" title="Buy Sell Rent Everyting">
+										<img style="margin-top: -7px;" src="public/image/template/logo.png"> 
+										Xem Xi Nê
+									</a>
+
+                                <button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
+                                        <span class = "icon-bar"></span>
+                                        <span class = "icon-bar"></span>
+                                        <span class = "icon-bar"></span>
+                                </button>
+
+                                <div class = "collapse navbar-collapse navHeaderCollapse">
+									
+                                        <ul class = "nav navbar-nav navbar-right">                                   
+                                                <li ><a href = "/dangchieu"> Đang chiếu </a></li>
+                                                <li><a href = "/sapchieu">Sắp chiếu </a></li>
+                                                <li class = "active"><a href = "/chat">Rủ nhau xem phim</a></li>                                                
+                                                <li>
+                       							  <form id = "submitform" class="navbar-form navbar-left" role="search" action="/index.htm" method="get">	
+														<img src = "public/image/template/facebook-icon.png" />
+														<a><img id="facebook_loader" height="35px" width="35px" src = "public/image/template/loading.gif" /></a>					
+												  </form>
+                                                </li>
+                                        </ul>
+                               
+                                </div>
+                               
+                        </div>
+                        </div>
+                </div>
+ <div class = "col-xs-0 col-sm-1 col-lg-2">
+ </div>
+ <div class = "col-xs-12 col-sm-10 col-lg-8" style="margin-top:90px;margin-bottom:70px;">
 	 <div id="content">
-		<div id="display" name="text" style="padding-top:12px;height:300px;width:100%;border:1px solid #CCC;background:#FFF;">	
+		<div id="displayer" name="text" class = "panel panel-success" style="height:400px;width:100%;">	
+				<div class="panel-heading" style="height:40px;padding-right:0px;background-color:#D358F7">
+					<div  class = "col-xs-10 col-sm-8 col-lg-10" style="text-align:left;margin-left:-15px;">
+						<img src="public/image/template/yhm.png">Nguời_lạ_2014 
+					</div>
+					<div  class = "col-xs-2 col-sm-4 col-lg-2" style="text-align:right;padding-right:0px;">
+						<a href="/chat"><img src="public/image/template/xbutton.png" /></a>
+					</div>	
+				</div>
+				<div id="display">	
+					<div id="initDisplay" style="text-align:center;padding-top:15px;margin-left:2px;margin-right:2px;">
+					<div class="row">
+					
+						<div  class = "col-xs-0 col-sm-2 col-lg-4">
+						</div>
+						
+						<div  class = "col-xs-12 col-sm-8 col-lg-4">
+							<p><strong> Sử dụng tài khỏan </strong></p>
+							<input style="margin-left:12px;"type="radio" name="name" id="rad1" checked />
+							<label style="margin-right:12px;" for="rad1" onclick="" data-content="Option 1">Người lạ</label>
+							<input type="radio" name="name" id="rad2" disabled />
+							<label id="acc" for="rad2" data-content="Option 2">
+							<img height="22px" width="22px" src = "public/image/template/facebook-icon.png" />
+							<img id="facebook_loader" height="12px" width="12px" src = "public/image/template/loading.gif" />
+							</label>
+							
+							
+							<select class="form-control">
+							  <option>Chọn Phim</option>
+							  <option>2</option>
+							  <option>3</option>
+							  <option>4</option>
+							  <option>5</option>
+							</select>
+							
+							<select class="form-control" style="margin-top:12px;">
+							  <option>Địa Điểm</option>
+							  <option>Sài Gòn</option>
+							  <option>Thủ Đô</option>
+							  <option>Đà Nẵng</option>
+							  <option>Quy Nhơn</option>
+							  <option>Hạ Long</option>
+							  <option>Hải Phòng</option>
+							  <option>Biên Hòa</option>
+							  <option>Cần Thơ</option>
+							</select>
+							
+							<button id="findChatter" class="btn btn-primary btn-lg" style="width:100%;margin-top: 12px;" onclick="sendConnectReq()" type="submit" id="contact-chat" >
+								Tìm bạn xem phim
+							</button>
+						</div>
+						
+						<div  class = "col-xs-0 col-sm-2 col-lg-4">
+						</div>
+					
+					</div>
+
+					</div>
+				</div>
 		</div>
-		<div id="contact">	
-			<div class="select-button"><div class="small-arrow-down"></div></div>
-			Message:<input id="text_content" placeholder="Your message" type="text" tabindex="1" onfocus="receiveMsg()" onkeyup="inputKeyUp(event)"/>
-			<button onclick="sendMsg()" type="submit" id="contact-chat">Chat</button>
+		<div id="contact" style="display:none;">	
+			<div class = "row">
+				<div class = "col-lg-10" style="margin-top:5px;">
+						<div class="input-group input-group-lg" style="width:100%">
+						<input id="text_content" class = "form-control" placeholder="How do you live? " type="text" tabindex="1" onfocus="receiveMsg()" onkeyup="inputKeyUp(event)"/>
+						</div> 
+				 </div> 
+				 
+				 <div class = "col-lg-2" style="margin-top:5px;">
+					<div class="btn-group btn-group-lg" style="width:100%;">
+						<button class = "btn" onclick="sendMsg()" type="submit" id="contact-chat" style="width:100%;background-color:#c3c3c3;">Send</button>
+					</div>
+				 </div>
+			</div>	 
 		</div>
 		<!-- roomID is a special number, it is a crypto product from sender and receiver session with a special key from server
 			 So that, it seems to be careful from attacking.
@@ -229,9 +333,39 @@ function initPage(){
 		<input type="hidden" id="receiver_sessionID" name="revID" value="" />
 		<input type="hidden" id="roomID" name="rID" value="" />
 	</div>
-	<div class="footer">
-		<% include footer.ejs %>
-	</div>
+	
 </div>
+     <div class = "col-xs-0 col-sm-1 col-lg-2">
+	</div>     
+          
+          
+            
+            <!-- Contact Page-->
+			<div class = "modal fade" id = "contact_admin" role = "dialog">
+				<div class = "modal-dialog">
+					<div class = "modal-content">
+						<div class = "modal-header">
+							<h4>Contact Tech Site</h4>
+						</div>
+						<div class = "modal-body">
+							<p>Test Trang Lien He</p>
+						</div>
+						<div class = "modal-footer">
+					<a class = "btn btn-primary" data-dismiss = "modal">Dong Y</a>    
+							<a class = "btn btn-default" data-dismiss = "modal">Close</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+						
+			<div class = "navbar navbar-default navbar-fixed-bottom">
+		   
+					<div class = "container">
+							<p class = "navbar-text pull-left"><a href = "#contact_admin" data-toggle="modal">Contact</a> · Giới thiệu · FAQ · Điều khoản · RSS · Cách vào Facebook </p>	
+					</div>
+			</div>      
+
+
 </body>
 </html>
